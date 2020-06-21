@@ -8,6 +8,8 @@ from tqdm import tqdm
 import numpy as np
 from gensim.models import KeyedVectors
 
+import datetime
+
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -28,4 +30,7 @@ def cut_news():
 
 
 if __name__ == "__main__":
+    starttime = datetime.datetime.now()
     cut_news()
+    endtime = datetime.datetime.now()
+    print('Used time: %f sec.'%((endtime - starttime).seconds))

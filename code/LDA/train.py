@@ -9,6 +9,8 @@ import configparser
 from gensim import corpora,models
 from tqdm import tqdm
 
+import datetime
+
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -82,4 +84,7 @@ def train():
 
 
 if __name__ == "__main__":
+    starttime = datetime.datetime.now()
     train()
+    endtime = datetime.datetime.now()
+    print('Used time: %f sec.'%((endtime - starttime).seconds))
