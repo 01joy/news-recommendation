@@ -8,6 +8,9 @@ from tqdm import tqdm
 import numpy as np
 from gensim.models import KeyedVectors
 
+import datetime
+
+
 config = configparser.ConfigParser()
 config.read('../config.ini')
 
@@ -42,4 +45,7 @@ def get_all_docs_embedding():
 
 
 if __name__ == "__main__":
+    starttime = datetime.datetime.now()
     get_all_docs_embedding()
+    endtime = datetime.datetime.now()
+    print('Used time: %f sec.'%((endtime - starttime).seconds))

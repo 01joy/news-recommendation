@@ -10,7 +10,15 @@ import matplotlib
 matplotlib.use('AGG')#或者PDF, SVG或PS
 import matplotlib.pyplot as plt
 import seaborn as sns
+import configparser
 
+config = configparser.ConfigParser()
+config.read('../config.ini')
+
+num_words = int(config['3DCNN']['num_words'])
+num_train_negatives = int(config['3DCNN']['num_train_negatives'])
+path_model_folder = config['3DCNN']['path_model_folder']
+num_epochs = int(config['3DCNN']['num_epochs'])
 
 class CNN():
 
@@ -53,23 +61,29 @@ class CNN():
 
 
     def plot_acc_loss(self, history):
-        epochs = range(len(history.history['accuracy']))
+        epochs = [i + 1 for i in range(len(history.history['accuracy']))]
         plt.figure()
-        plt.plot(epochs,history.history['accuracy'],'b',label='Training acc')
-        plt.plot(epochs,history.history['val_accuracy'],'r',label='Validation acc')
+        plt.plot(epochs, history.history['accuracy'],'b',label='Training acc')
+        plt.plot(epochs, history.history['val_accuracy'],'r',label='Validation acc')
         plt.title('Traing and Validation accuracy')
         plt.legend()
+        plt.ylim(0.6, 1)
+        plt.xlim(0, num_epochs)
+        plt.xlabel('epochs')
         plt.savefig('model_acc.png')
 
         plt.figure()
-        plt.plot(epochs,history.history['loss'],'b',label='Training loss')
-        plt.plot(epochs,history.history['val_loss'],'r',label='Validation loss')
+        plt.plot(epochs, history.history['loss'],'b',label='Training loss')
+        plt.plot(epochs, history.history['val_loss'],'r',label='Validation loss')
         plt.title('Traing and Validation loss')
         plt.legend()
+        plt.ylim(0.1, 0.6)
+        plt.xlim(0, num_epochs)
+        plt.xlabel('epochs')
         plt.savefig('model_loss.png')
 
     def fit_model(self, inputs, outputs, batch_size, num_epochs):
-        filepath="3dcnn_epoch_{epoch:02d}_val_loss_{val_loss:.2f}.model"
+        filepath="%s/3dcnn_word_%d_neg_%d_epoch_{epoch:02d}_val_loss_{val_loss:.2f}.model"%(path_model_folder, num_words, num_train_negatives)
         checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
         callbacks_list = [checkpoint]
         history = self.model.fit(inputs, outputs, validation_split = 0.2, batch_size = batch_size, epochs = num_epochs, callbacks = callbacks_list, verbose=1)
