@@ -78,7 +78,7 @@ def test():
 
         candidates = sorted(candidates, key = lambda x : x[1])
         topn_candidates = [x[0] for x in candidates[:num_recommendations]]
-        mp_pred[user_id] = [train_news_ids, list(set(test_news_ids)), topn_candidates]
+        mp_pred[user_id] = [train_news_ids, list(clicked_news_ids), topn_candidates]
     
     save_prediction(mp_pred)
 

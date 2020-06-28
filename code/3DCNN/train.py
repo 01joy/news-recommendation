@@ -19,7 +19,7 @@ mp_train_hist = my_utils.read_pkl(config['DEFAULT']['path_train_hist'])
 num_used_hists = int(config['DEFAULT']['num_used_hists'])
 num_word_embedding_dims = int(config['DEFAULT']['num_word_embedding_dims'])
 num_words = int(config['3DCNN']['num_words'])
-batch_size = int(config['3DCNN']['batch_size'])
+sample_batch_size = int(config['3DCNN']['sample_batch_size'])
 num_epochs = int(config['3DCNN']['num_epochs'])
 num_train_negatives = int(config['3DCNN']['num_train_negatives'])
 
@@ -92,7 +92,7 @@ def train():
     article_in = np.resize(article_in, (article_in.shape[0], 1) + article_in.shape[1:])
 
     print('start training...')
-    model.fit_model([user_in, article_in], np.array(truth), batch_size, num_epochs)
+    model.fit_model([user_in, article_in], np.array(truth), sample_batch_size, num_epochs)
 
 
 if __name__ == "__main__":
